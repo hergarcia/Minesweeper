@@ -52,7 +52,7 @@ def is_mine(board, x, y):
 
         return board[y][x]
 
-
-level = int(input("Elija un nivel del 1 al 10: "))
-board = create_board(level)
-print(is_mine(board, 2, 3))
+if __name__ == '__main__':
+    level = int(input("Elija un nivel del 1 al 10: "))
+    board = create_board(level)
+    print(is_mine(board, 2, 3))

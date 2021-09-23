@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscaminas!</title>
+    <script src="/static/jquery-3.5.0.min.js"></script>
+    <style>
+        body{
+            text-align: center;
+        }
+        table{
+            margin: auto;
+        }
+        button{
+            width: 20px;
+            height: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: white;
+        }
+        tr{
+            margin: 0;
+            padding: 0;
+        }
+
+        td{
+            margin: 0;
+            padding: 0;
+        }
+        .mina{
+            background-color: #be0b18;
+            border-style: inset;
+        }
+
+        .free{
+            background-color: #c1ffc3;
+            border-style: inset;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Buscaminas!</h1>
+<table>
+    {% for y in alto %}
+        <tr>
+            {% for x in largo %}
+                <td><button id="{{x}}-{{y}}" fila="{{ y }}" columna="{{ x }}"> </button></td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+<h1 id="resultado"></h1>
+<h2 id="volver" style="display: none"><a href="/">Volver al inicio</a></h2>
+
+<script>
+    $( document ).ready(function() {
+        $("button").click(function(){
+            var b = this;
+           $.post("/check", {x: $(this).attr("columna"), y: $(this).attr("fila")}, function(data){
+               if(data.mina === true){
+                   $(b).addClass("mina").prop('disabled', true);
+                   if(typeof data.lista != "undefined"){
+                        for (let elm of data.lista) {
+                            let id = elm.x + "-" + elm.y;
+                            $("#" + id).addClass("mina").prop('disabled', true);
+                        }
+                    }
+                   $("#resultado").html("Perdiste :(");
+                   $("#volver").show();
+               }else{
+                   $(b).addClass("free").prop('disabled', true);
+                    if(typeof data.lista != "undefined"){
+                        for (let elm of data.lista) {
+                            let id = elm.x + "-" + elm.y;
+                            $("#" + id).addClass("free").prop('disabled', true);
+                        }
+                    }
+                    if(typeof data.numero != "undefined"){
+                        $(b).addClass("free").html(data.numero).prop('disabled', true);
+                    }
+                    if(typeof data.fin !== "undefined" && data.fin === true){
+                        $("#resultado").html("Victoria!");
+                        $("#volver").show();
+                    }
+               }
+           });
+        });
+    });
+
+</script>
+</body>
+</html>
