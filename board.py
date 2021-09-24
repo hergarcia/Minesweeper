@@ -15,19 +15,11 @@ def get_initial_parameters(level):
 
 
 def generate_board_1d(size, mines):
-    lista = []
     range_cantidad_false = range(size - mines)
     range_cantidad_true = range(mines)
-
-    def insertar(value):
-        lista.append(value)
-
-    for i in range_cantidad_true:
-        insertar(True)
-
-    for j in range_cantidad_false:
-        insertar(False)
-
+    lista = [True for _ in range_cantidad_true]
+    lista2 = [False for _ in range_cantidad_false]
+    lista.extend(lista2)
     shuffle(lista)
     return lista
 
@@ -52,7 +44,7 @@ def is_mine(board, x, y):
 
         return board[y][x]
 
-
-level = int(input("Elija un nivel del 1 al 10: "))
-board = create_board(level)
-print(is_mine(board, 2, 3))
+if __name__ == '__main__':
+    level = int(input("Elija un nivel del 1 al 10: "))
+    board = create_board(level)
+    print(is_mine(board, 2, 3))
