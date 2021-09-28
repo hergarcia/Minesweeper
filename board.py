@@ -36,7 +36,6 @@ def create_board(level):
     ls = generate_board_1d(size, mines)
     k = long
     board_2d = convert_board_to_2d(ls, k)
-    print(board_2d)
     return board_2d
 
 def is_mine(board, x, y):
