@@ -1,8 +1,8 @@
 import math
 from random import shuffle
 
-def get_initial_parameters(level):
 
+def get_initial_parameters(level):
     if 1 > level or level > 10:
         print("Debe elegir un nivel del 1 al 10")
         return
@@ -30,19 +30,20 @@ def convert_board_to_2d(ls, k):
         lista1.append(ls[j * k:(j * k) + k]),
     return lista1
 
+
 def create_board(level):
     (time, width, long, mines) = get_initial_parameters(level)
     size = int(width * long)
     ls = generate_board_1d(size, mines)
-    k = long
-    board_2d = convert_board_to_2d(ls, k)
+    board_2d = convert_board_to_2d(ls, long)
     print(board_2d)
     return board_2d
 
+
 def is_mine(board, x, y):
     if 0 <= y < len(board) and 0 <= x < len(board[0]):
-
         return board[y][x]
+
 
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
