@@ -40,10 +40,67 @@ def create_board(level):
 
 def is_mine(board, x, y):
     if 0 <= y < len(board) and 0 <= x < len(board[0]):
+        if board[y][x]:
+            lista = get_all_the_mines(board)
+            num = 0
+        else:
+            lista = []
+            num = get_mines_around(board, x, y)
 
-        return board[y][x]
+        is_mine_dict = {
+
+            "mina": board[y][x],
+            "lista": lista,
+            "numero": num
+        }
+        return is_mine_dict
+
+
+def get_all_the_mines(board):
+    lst_coord_dict = []
+    for index_y, filas in enumerate(board):
+        for index_x, mina in enumerate(filas):
+            if mina:
+                coord_dict = {
+                    "x": index_x,
+                    "y": index_y
+                }
+                lst_coord_dict.append(coord_dict)
+    return lst_coord_dict
+
+
+def get_mines_around(board, x, y):
+    def casos_validos(caso):
+        (time, width, long, mines) = get_initial_parameters(1)
+        if 0 <= caso[0] < width and 0 <= caso[1] < long:
+            return True
+        else:
+            return False
+
+    def minas_cercanas(casilla):
+        if board[casilla[0]][casilla[1]]:
+            return True
+        else:
+            return False
+
+    lst_casos = [
+        ((y + 1), x),
+        ((y - 1), x),
+        (y, (x + 1)),
+        (y, (x - 1)),
+        ((y + 1), (x + 1)),
+        ((y - 1), (x - 1)),
+        ((y + 1), (x - 1)),
+        ((y - 1), (x + 1))
+    ]
+    lista_casillas_validas = list(filter(casos_validos, lst_casos))
+    numero_minas_cercanas = len(list(filter(minas_cercanas, lista_casillas_validas)))
+    return numero_minas_cercanas
+
 
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
     board = create_board(level)
     print(is_mine(board, 2, 3))
+    print(get_all_the_mines(board))
+    print(get_mines_around(board, 2, 3))
