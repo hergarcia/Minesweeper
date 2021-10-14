@@ -71,7 +71,7 @@ def get_all_the_mines(board):
 
 def get_mines_around(board, x, y):
     def casos_validos(caso):
-        (time, width, long, mines) = get_initial_parameters(1)
+        (time, width, long, mines) = get_initial_parameters(level)
         if 0 <= caso[0] < width and 0 <= caso[1] < long:
             return True
         else:
@@ -101,4 +101,37 @@ def get_mines_around(board, x, y):
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
     board = create_board(level)
-    print(is_mine(board, 2, 3))
+    resultado = []
+
+
+def discover_clear_cells(board, x, y, visited=[]):
+    def casos_validos(caso):
+        (time, width, long, mines) = get_initial_parameters(1)
+        if 0 <= caso[0] < width and 0 <= caso[1] < long:
+            return True
+        else:
+            return False
+
+    lst_casos = [
+        ((y + 1), x),
+        ((y - 1), x),
+        (y, (x + 1)),
+        (y, (x - 1)),
+        ((y + 1), (x + 1)),
+        ((y - 1), (x - 1)),
+        ((y + 1), (x - 1)),
+        ((y - 1), (x + 1))
+    ]
+    casillas_cercanas = list(filter(casos_validos, lst_casos))
+
+    num1 = get_mines_around(board, x, y)
+    visited.append((x, y))
+    if num1 == 0 and visited.count((x, y)) < 2:
+        for celda in casillas_cercanas:
+            num2 = get_mines_around(board, celda[1], celda[0])
+            if resultado.count({"x": celda[1], "y": celda[0], "numero": num2}) == 0: resultado.append({"x": celda[1], "y": celda[0], "numero": num2})
+        for celda in casillas_cercanas:
+            discover_clear_cells(board, celda[1], celda[0], visited)
+    elif resultado.count({"x": x, "y": y, "numero": num1}) == 0: resultado.append({"x": x, "y": y, "numero": num1})
+    return resultado
+
