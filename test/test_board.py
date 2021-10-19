@@ -1,6 +1,8 @@
 from unittest import TestCase
 from random import randint
-from board import convert_board_to_2d, get_initial_parameters, generate_board_1d, create_board, is_mine, get_all_the_mines, get_mines_around
+from board import convert_board_to_2d, get_initial_parameters, generate_board_1d, create_board, is_mine, \
+    get_all_the_mines, get_mines_around, discover_clear_cells
+
 
 class Test(TestCase):
     def test_get_initial_parameters(self):
@@ -151,3 +153,41 @@ class Test(TestCase):
         # verify
         self.assertIsNotNone(res)
         self.assertIn(res, range(0, 8))
+
+    def test_discover_clear_cells(self):
+        # given
+        board = [
+            [True, True, True, True],
+            [True, False, False, False],
+            [True, False, False, False],
+        ]
+
+        # when
+        res = discover_clear_cells(board, 3, 2)
+
+        # verify
+        self.assertEqual(len(res), 6)
+        self.assertIn({'x': 3, 'y': 2, 'numero': 0}, res)
+        self.assertIn({'x': 2, 'y': 2, 'numero': 0}, res)
+        self.assertIn({'x': 1, 'y': 2, 'numero': 2}, res)
+        self.assertIn({'x': 3, 'y': 1, 'numero': 2}, res)
+        self.assertIn({'x': 2, 'y': 1, 'numero': 3}, res)
+        self.assertIn({'x': 1, 'y': 1, 'numero': 5}, res)
+
+    def test_discover_clear_cells_2(self):
+        # given
+        board = [
+            [False, False, True, True],
+            [False, False, False, False],
+            [True, False, False, False],
+        ]
+
+        # when
+        res = discover_clear_cells(board, 0, 0)
+
+        # verify
+        self.assertEqual(len(res), 4)
+        self.assertIn({'x': 0, 'y': 0, 'numero': 0}, res)
+        self.assertIn({'x': 1, 'y': 0, 'numero': 1}, res)
+        self.assertIn({'x': 0, 'y': 1, 'numero': 1}, res)
+        self.assertIn({'x': 1, 'y': 1, 'numero': 2}, res)
