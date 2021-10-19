@@ -151,3 +151,14 @@ class Test(TestCase):
         # verify
         self.assertIsNotNone(res)
         self.assertIn(res, range(0, 8))
+
+    def test_discover_c(self):
+        # given
+        x = 2
+        y = 0
+        visited = []
+
+        # when
+        board_1d = [True, False, False, False, False, True, False, True]
+
+        # verify

@@ -104,8 +104,7 @@ if __name__ == '__main__':
 
 def discover_clear_cells(board, x, y, visited=[]):
     def casos_validos(caso):
-        (time, width, long, mines) = get_initial_parameters(level)
-        if 0 <= caso[0] < width and 0 <= caso[1] < long:
+        if 0 <= caso[0] < len(board) and 0 <= caso[1] < len(board[0]):
             return True
         else:
             return False
