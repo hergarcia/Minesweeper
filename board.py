@@ -71,8 +71,7 @@ def get_all_the_mines(board):
 
 def get_mines_around(board, x, y):
     def casos_validos(caso):
-        (time, width, long, mines) = get_initial_parameters(level)
-        if 0 <= caso[0] < width and 0 <= caso[1] < long:
+        if 0 <= caso[0] < len(board) and 0 <= caso[1] < len(board[0]):
             return True
         else:
             return False
@@ -101,12 +100,11 @@ def get_mines_around(board, x, y):
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
     board = create_board(level)
-    resultado = []
 
 
 def discover_clear_cells(board, x, y, visited=[]):
     def casos_validos(caso):
-        (time, width, long, mines) = get_initial_parameters(1)
+        (time, width, long, mines) = get_initial_parameters(level)
         if 0 <= caso[0] < width and 0 <= caso[1] < long:
             return True
         else:
@@ -123,15 +121,15 @@ def discover_clear_cells(board, x, y, visited=[]):
         ((y - 1), (x + 1))
     ]
     casillas_cercanas = list(filter(casos_validos, lst_casos))
-
-    num1 = get_mines_around(board, x, y)
-    visited.append((x, y))
-    if num1 == 0 and visited.count((x, y)) < 2:
-        for celda in casillas_cercanas:
-            num2 = get_mines_around(board, celda[1], celda[0])
-            if resultado.count({"x": celda[1], "y": celda[0], "numero": num2}) == 0: resultado.append({"x": celda[1], "y": celda[0], "numero": num2})
-        for celda in casillas_cercanas:
-            discover_clear_cells(board, celda[1], celda[0], visited)
-    elif resultado.count({"x": x, "y": y, "numero": num1}) == 0: resultado.append({"x": x, "y": y, "numero": num1})
-    return resultado
+    resultado = []
+    num = get_mines_around(board, x, y)
+    if ((x, y)) not in visited:
+        resultado.append({"x": x, "y": y, "numero": num})
+        visited.append((x, y))
+        if num == 0:
+            for celda in casillas_cercanas:
+                resultado += discover_clear_cells(board, celda[1], celda[0], visited)
+        return resultado
+    else:
+        return resultado
 
