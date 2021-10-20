@@ -1,6 +1,6 @@
 from unittest import TestCase
 from random import randint
-from board import convert_board_to_2d, get_initial_parameters, generate_board_1d, create_board, is_mine, get_all_the_mines, get_mines_around
+from board import convert_board_to_2d, get_initial_parameters, generate_board_1d, create_board, is_mine, get_all_the_mines, get_mines_around, discover_clear_cells
 
 class Test(TestCase):
     def test_get_initial_parameters(self):

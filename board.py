@@ -44,7 +44,7 @@ def is_mine(board, x, y):
             lista = get_all_the_mines(board)
             num = 0
         else:
-            lista = []
+            lista = discover_clear_cells(board, x, y, visited=[])
             num = get_mines_around(board, x, y)
 
         is_mine_dict = {
