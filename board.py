@@ -44,7 +44,7 @@ def is_mine(board, x, y):
             lista = get_all_the_mines(board)
             num = 0
         else:
-            lista = discover_clear_cells(board, x, y, visited=[])
+            lista = discover_clear_cells(board, x, y)
             num = get_mines_around(board, x, y)
 
         is_mine_dict = {
@@ -100,9 +100,7 @@ def get_mines_around(board, x, y):
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
     board = create_board(level)
-
-
-def discover_clear_cells(board, x, y, visited=[]):
+def __casillas_cercanas(x, y):
     def casos_validos(caso):
         if 0 <= caso[0] < len(board) and 0 <= caso[1] < len(board[0]):
             return True
@@ -119,16 +117,17 @@ def discover_clear_cells(board, x, y, visited=[]):
         ((y + 1), (x - 1)),
         ((y - 1), (x + 1))
     ]
-    casillas_cercanas = list(filter(casos_validos, lst_casos))
+    return list(filter(casos_validos, lst_casos))
+
+def discover_clear_cells(board, x, y, visited=[]):    
+    casillas_cercanas = __casillas_cercanas(x, y)
     resultado = []
     num = get_mines_around(board, x, y)
-    if ((x, y)) not in visited:
+    if (x, y) not in visited:
         resultado.append({"x": x, "y": y, "numero": num})
         visited.append((x, y))
         if num == 0:
             for celda in casillas_cercanas:
                 resultado += discover_clear_cells(board, celda[1], celda[0], visited)
-        return resultado
-    else:
-        return resultado
+    return resultado
 
