@@ -152,13 +152,40 @@ class Test(TestCase):
         self.assertIsNotNone(res)
         self.assertIn(res, range(0, 8))
 
-    def test_discover_c(self):
+    def test_discover_clear_cells(self):
         # given
-        x = 2
-        y = 0
-        visited = []
+        board = [
+            [True, True, True, True],
+            [True, False, False, False],
+            [True, False, False, False],
+        ]
 
         # when
-        board_1d = [True, False, False, False, False, True, False, True]
+        res = discover_clear_cells(board, 3, 2)
 
         # verify
+        self.assertEqual(len(res), 6)
+        self.assertIn({'x': 3, 'y': 2, 'numero': 0}, res)
+        self.assertIn({'x': 2, 'y': 2, 'numero': 0}, res)
+        self.assertIn({'x': 1, 'y': 2, 'numero': 2}, res)
+        self.assertIn({'x': 3, 'y': 1, 'numero': 2}, res)
+        self.assertIn({'x': 2, 'y': 1, 'numero': 3}, res)
+        self.assertIn({'x': 1, 'y': 1, 'numero': 5}, res)
+
+    def test_discover_clear_cells_2(self):
+        # given
+        board = [
+            [False, False, True, True],
+            [False, False, False, False],
+            [True, False, False, False],
+        ]
+
+        # when
+        res = discover_clear_cells(board, 0, 0)
+
+        # verify
+        self.assertEqual(len(res), 4)
+        self.assertIn({'x': 0, 'y': 0, 'numero': 0}, res)
+        self.assertIn({'x': 1, 'y': 0, 'numero': 1}, res)
+        self.assertIn({'x': 0, 'y': 1, 'numero': 1}, res)
+        self.assertIn({'x': 1, 'y': 1, 'numero': 2}, res)
