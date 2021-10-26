@@ -1,8 +1,8 @@
 import math
 from random import shuffle
 
-def get_initial_parameters(level):
 
+def get_initial_parameters(level):
     if 1 > level or level > 10:
         print("Debe elegir un nivel del 1 al 10")
         return
@@ -11,7 +11,7 @@ def get_initial_parameters(level):
     long = (int(level * 5))
     width = (int((level * 5) * (16 / 9)) + 10)
     mines = int(long * width * 0.15)
-    return (time, width, long, mines)
+    return time, width, long, mines
 
 
 def generate_board_1d(size, mines):
@@ -30,6 +30,7 @@ def convert_board_to_2d(ls, k):
         lista1.append(ls[j * k:(j * k) + k]),
     return lista1
 
+
 def create_board(level):
     (time, width, long, mines) = get_initial_parameters(level)
     size = int(width * long)
@@ -38,13 +39,14 @@ def create_board(level):
     board_2d = convert_board_to_2d(ls, k)
     return board_2d
 
+
 def is_mine(board, x, y):
     if 0 <= y < len(board) and 0 <= x < len(board[0]):
         if board[y][x]:
             lista = get_all_the_mines(board)
             num = 0
         else:
-            lista = []
+            lista = discover_clear_cells(board, x, y)
             num = get_mines_around(board, x, y)
 
         is_mine_dict = {
@@ -70,15 +72,20 @@ def get_all_the_mines(board):
 
 
 def get_mines_around(board, x, y):
-    def casos_validos(caso):
-        (time, width, long, mines) = get_initial_parameters(1)
-        if 0 <= caso[0] < width and 0 <= caso[1] < long:
+    def minas_cercanas(casilla):
+        if board[casilla[0]][casilla[1]]:
             return True
         else:
             return False
 
-    def minas_cercanas(casilla):
-        if board[casilla[0]][casilla[1]]:
+    lista_casillas_validas = __casillas_cercanas(board, x, y)
+    numero_minas_cercanas = len(list(filter(minas_cercanas, lista_casillas_validas)))
+    return numero_minas_cercanas
+
+
+def __casillas_cercanas(board, x, y):
+    def casos_validos(caso):
+        if 0 <= caso[0] < len(board) and 0 <= caso[1] < len(board[0]):
             return True
         else:
             return False
@@ -93,12 +100,22 @@ def get_mines_around(board, x, y):
         ((y + 1), (x - 1)),
         ((y - 1), (x + 1))
     ]
-    lista_casillas_validas = list(filter(casos_validos, lst_casos))
-    numero_minas_cercanas = len(list(filter(minas_cercanas, lista_casillas_validas)))
-    return numero_minas_cercanas
+    return list(filter(casos_validos, lst_casos))
+
+
+def discover_clear_cells(board, x, y, visited=[]):
+    casillas_cercanas = __casillas_cercanas(board, x, y)
+    resultado = []
+    num = get_mines_around(board, x, y)
+    if (x, y) not in visited:
+        resultado.append({"x": x, "y": y, "numero": num})
+        visited.append((x, y))
+        if num == 0:
+            for celda in casillas_cercanas:
+                resultado += discover_clear_cells(board, celda[1], celda[0], visited)
+    return resultado
 
 
 if __name__ == '__main__':
     level = int(input("Elija un nivel del 1 al 10: "))
     board = create_board(level)
-    print(is_mine(board, 2, 3))

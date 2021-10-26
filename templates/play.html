@@ -73,7 +73,7 @@
                     if(typeof data.lista != "undefined"){
                         for (let elm of data.lista) {
                             let id = elm.x + "-" + elm.y;
-                            $("#" + id).addClass("free").prop('disabled', true);
+                            $("#" + id).addClass("free").html(elm.numero).prop('disabled', true);
                         }
                     }
                     if(typeof data.numero != "undefined"){
