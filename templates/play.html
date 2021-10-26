@@ -73,11 +73,17 @@
                     if(typeof data.lista != "undefined"){
                         for (let elm of data.lista) {
                             let id = elm.x + "-" + elm.y;
-                            $("#" + id).addClass("free").html(elm.numero).prop('disabled', true);
+                            if(elm.numero == "0"){
+                                $("#" + id).addClass("free").prop('disabled', true);
+                            }else{
+                                $("#" + id).addClass("free").html(elm.numero).prop('disabled', true);
+                            }
                         }
                     }
-                    if(typeof data.numero != "undefined"){
+                    if(typeof data.numero != "undefined" && elm.numero != "0"){
                         $(b).addClass("free").html(data.numero).prop('disabled', true);
+                    }else{
+                        $("#" + id).addClass("free").prop('disabled', true);
                     }
                     if(typeof data.fin !== "undefined" && data.fin === true){
                         $("#resultado").html("Victoria!");
