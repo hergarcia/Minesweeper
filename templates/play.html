@@ -37,6 +37,11 @@
             border-style: inset;
         }
 
+        .bandera{
+            background-color: #08c4b4;
+            border-style: inset;
+        }
+
     </style>
 </head>
 <body>
@@ -55,6 +60,11 @@
 
 <script>
     $( document ).ready(function() {
+        $("button").contextmenu(function(event) {
+        event.preventDefault();
+           var b = this;
+            $(b).addClass("bandera").prop('disabled', true);
+        });
         $("button").click(function(){
             var b = this;
            $.post("/check", {x: $(this).attr("columna"), y: $(this).attr("fila")}, function(data){
